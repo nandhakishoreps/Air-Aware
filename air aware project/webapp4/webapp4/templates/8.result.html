@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AirAware</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="background-overlay">
+        <img src="../static/img.webp" alt="Air Quality Background">
+    </div>
+    <div id="content">
+        <h1>Air Quality Classification Result</h1>
+        <h2>Air Quality Index (AQI) for {{ city }} on {{ date }}</h2>
+
+        <table>
+            <tr>
+                <th>Pollutant</th>
+                <th>Concentration (µg/m³)</th>
+            </tr>
+            {% for pollutant, concentration in pollutant_concentrations.items() %}
+            <tr>
+                <td>{{ pollutant }}</td>
+                <td>{{ concentration }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Pollutant Concentrations Bar Plot:</h2>
+        <canvas id="pollutantChart" width="400" height="200"></canvas>
+
+        <h2 class="aqi-status {% if AQI <= 50 %}green
+                    {% elif AQI <= 100 %}yellow
+                    {% elif AQI <= 200 %}orange
+                    {% elif AQI <= 300 %}red
+                    {% else %}red
+                    {% endif %}">Final AQI predicted: {{ AQI }} [{{ category }}]</h2>
+
+        <h2>EFFECT ON HEALTH :</h2>
+        <table>
+            <tr>
+                <th>High Concentration Pollutant</th>
+                <th>Health Implication</th>
+            </tr>
+            {% for pollutant, implication in health_implications.items() %}
+            {% if implication != "" %}
+            <tr>
+                <td>{{ pollutant }}</td>
+                <td>{{ implication }}</td>
+            </tr>   
+            {% endif %}
+            {% endfor %}
+        </table>
+
+        <table id="aqi-remarks">
+            <tr>
+                <th>AQI</th>
+                <th>Remark</th>
+                <th>Possible Health Impacts</th>
+            </tr>
+            <tr>
+                <td>0-50</td>
+                <td>Good</td>
+                <td>Minimal Impact</td>
+            </tr>
+            <tr>
+                <td>51-100</td>
+                <td>Satisfactory</td>
+                <td>Minor breathing discomfort to sensitive people</td>
+            </tr>
+            <tr>
+                <td>101-200</td>
+                <td>Moderate</td>
+                <td>Breathing discomfort to the people with lung, heart disease, children and older adults</td>
+            </tr>
+            <tr>
+                <td>201-300</td>
+                <td>Poor</td>
+                <td>Breathing discomfort to people on prolonged exposure</td>
+            </tr>
+            <tr>
+                <td>301-400</td>
+                <td>Very Poor</td>
+                <td>Respiratory illness to the people on prolonged exposure</td>
+            </tr>
+            <tr>
+                <td>&gt;400</td>
+                <td>Severe</td>
+                <td>Respiratory effects even on healthy people</td>
+            </tr>
+        </table>
+
+        <h2>GLOBAL WARMING ALERT :</h2>
+        <h2 class="aqi-status">Amount of CO, NOx, and O3 are {{level}}: {{ cause }}</h2>
+    </div>               
+
+    <script>
+        // Get pollutant data from the backend (replace with actual data from the template engine)
+        const pollutants = {{ pollutant_concentrations.keys() | tojson }};
+        const concentrations = {{ pollutant_concentrations.values() | tojson }};
+
+        // Render the bar chart
+        const ctx = document.getElementById('pollutantChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: pollutants,
+                datasets: [{
+                    label: 'Pollutant Concentrations (µg/m³)',
+                    data: concentrations,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Concentration (µg/m³)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Pollutants'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Hard-coded AQI value for testing
+        const AQI = 320;
+
+        // Show the popup after the page is fully loaded
+        window.onload = function() {
+            // Check if AQI is severe or greater than 300
+            if (AQI >= 300) {
+                alert("Warning: The Air Quality Index (AQI) is Severe! Limit outdoor activities and use protection.");
+            }
+        };
+    </script>
+</body>
+</html>
+

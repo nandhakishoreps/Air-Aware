@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Report</title>
+    <style>
+        body {
+            background-image: url('../static/img.webp'); /* Background Image */
+            background-size: cover; /* Cover the full page */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* No repeating */
+            background-attachment: fixed; /* Fixed background */
+            font-family: Arial, sans-serif; /* Optional: Set a readable font */
+            height: 100vh; /* Full height */
+            margin: 0; /* Remove default margin */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Center vertically */
+            align-items: center; /* Center horizontally */
+        }
+
+        h1 {
+            color: white; /* Ensure text is visible */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* Text shadow for readability */
+            margin-bottom: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9); /* Light background for better contrast */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 90vw;  /* 90% of viewport width */
+            height: 80vh; /* 80% of viewport height */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        iframe {
+            width: 100%; /* Make iframe fill the container */
+            height: 100%;
+            border: none;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 24px;
+            font-size: 20px;
+            color: white;
+            background-color: #007BFF;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Your Report</h1>
+
+    <!-- Embed the PDF inside a larger container -->
+    <div class="container">
+        <iframe src="../static/Admin_Reports/report.pdf"></iframe>
+    </div>
+
+    <!-- Download Button -->
+    <a href="../static/Admin_Reports/report.pdf" download="report.pdf">Download Report</a>
+</br>
+
+
+</br>
+</body>
+</html>
+
